@@ -15,7 +15,7 @@ import {
 } from "./resilience.js";
 import { log } from "../log.js";
 
-const USER_AGENT = "mattermost-mcp/0.1.0";
+const USER_AGENT = "Mattermost/2.18.0 (Android; 14)";
 
 /** Construct a headless {@link Client4} (Bearer-only, cookies off, per-request timeout). */
 export function buildClient(url: string, timeoutMs: number): Client4 {

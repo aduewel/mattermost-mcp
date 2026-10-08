@@ -165,11 +165,13 @@ export async function captureSessionToken(
   try {
     const pages = await browser.pages();
     const page = pages[0] ?? (await browser.newPage());
-    await page.goto(`${url}/login`, { waitUntil: "domcontentloaded" });
+    // Mobile user agent so the server tags this as a mobile session for longer lifetime
+    await page.setUserAgent("Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36 Mattermost/2.18.0");
+    await page.goto(`${url}/login/sso/saml`, { waitUntil: "domcontentloaded" });
     const cdp = (await page.createCDPSession()) as unknown as CdpSession;
     await cdp.send("Network.enable"); // ensure Network.getCookies is serviced
 
-    log(`browser opened at ${url}/login — complete the SSO login in that window…`);
+    log(`browser opened at ${url}/login/sso/saml — complete the SSO login in that window…`);
 
     const deadline = Date.now() + timeoutMs;
     for (;;) {

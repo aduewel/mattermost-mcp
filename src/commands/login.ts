@@ -56,7 +56,10 @@ async function verify(client: Client4, url: string): Promise<{ username: string 
 
 export async function runLogin(args: string[] = []): Promise<void> {
   const forceGitlab = args.includes("--gitlab") || args.includes("--sso");
-  const url = await promptUrl();
+  const urlArgIndex = args.findIndex((a) => a === "--url" || a === "-u");
+  const rawUrl = urlArgIndex !== -1 ? args[urlArgIndex + 1] : undefined;
+  const urlFromArg = typeof rawUrl === "string" && rawUrl.length > 0 ? normalizeUrl(rawUrl) : null;
+  const url = urlFromArg ?? (await promptUrl());
   const mode = forceGitlab ? "gitlab" : await promptMode();
 
   // Browser SSO capture: drive a browser, the user logs in through their IdP, and
